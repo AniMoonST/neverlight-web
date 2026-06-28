@@ -57,10 +57,6 @@
     </div>
     <div class="footer-bottom">
       <div>© 2026 NeverLight. Все права защищены. Не связан с Mojang Studios.</div>
-      <div class="footer-support-links">
-        <a href="#" onclick="goToForumSection('Помощь')">Тех. поддержка</a>
-        <a href="#" onclick="goToForumSection('Жалобы и апелляции')">Оставить жалобу</a>
-      </div>
     </div>
   `;
   document.body.appendChild(footer);
