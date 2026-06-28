@@ -66,82 +66,110 @@
   <div class="modal-overlay" id="auth-modal">
     <div class="modal">
       <button class="modal-close" onclick="closeModal()">×</button>
-      <div class="modal-tabs" id="modal-tabs-row">
-        <div class="modal-tab active" data-tab="login" onclick="switchTab('login')">Войти</div>
-        <div class="modal-tab" data-tab="register" onclick="switchTab('register')">Регистрация</div>
+
+      <div class="modal-header" id="modal-header">
+        <div class="modal-header-logo">✦ NeverLight</div>
+        <div class="modal-header-sub" id="modal-header-sub">Войди или создай аккаунт</div>
       </div>
 
-      <!-- ВХОД -->
-      <div id="form-login">
-        <form onsubmit="doLogin(event)">
-          <div class="form-group"><label>Никнейм или Email</label><input type="text" id="login-username" required autocomplete="username"></div>
-          <div class="form-group"><label>Пароль</label><input type="password" id="login-password" required autocomplete="current-password"></div>
-          <div class="form-error" id="login-error"></div>
-          <button type="submit" class="btn btn-red" style="width:100%;padding:12px;margin-top:4px">Войти</button>
-          <div class="modal-switch" style="margin-top:10px">
-            <a onclick="showForgotPassword()" style="color:var(--text2);font-size:12px">Забыли пароль?</a>
+      <div class="modal-body">
+        <div class="modal-tabs" id="modal-tabs-row">
+          <div class="modal-tab active" data-tab="login" onclick="switchTab('login')">Войти</div>
+          <div class="modal-tab" data-tab="register" onclick="switchTab('register')">Регистрация</div>
+        </div>
+
+        <!-- ВХОД -->
+        <div id="form-login">
+          <form onsubmit="doLogin(event)">
+            <div class="form-group">
+              <label>Никнейм или Email</label>
+              <input type="text" id="login-username" required autocomplete="username" placeholder="Введи никнейм или email">
+            </div>
+            <div class="form-group">
+              <label>Пароль</label>
+              <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••">
+            </div>
+            <div class="form-error" id="login-error"></div>
+            <button type="submit" class="btn btn-red" style="width:100%;padding:13px;font-size:15px;border-radius:10px;margin-top:2px">Войти</button>
+            <div style="display:flex;justify-content:space-between;margin-top:12px">
+              <span class="modal-switch" style="margin:0"><a onclick="showForgotPassword()">Забыли пароль?</a></span>
+              <span class="modal-switch" style="margin:0">Нет аккаунта? <a onclick="switchTab('register')">Регистрация</a></span>
+            </div>
+          </form>
+        </div>
+
+        <!-- РЕГИСТРАЦИЯ -->
+        <div id="form-register" style="display:none">
+          <form onsubmit="doRegister(event)">
+            <div class="form-group">
+              <label>Никнейм</label>
+              <input type="text" id="reg-username" minlength="3" required autocomplete="username" placeholder="От 3 символов">
+            </div>
+            <div class="form-group">
+              <label>Email <span style="color:var(--accent2)">*</span></label>
+              <input type="email" id="reg-email" required autocomplete="email" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Пароль</label>
+              <input type="password" id="reg-password" minlength="6" required autocomplete="new-password" placeholder="От 6 символов">
+            </div>
+            <div class="form-error" id="register-error"></div>
+            <button type="submit" class="btn btn-red" style="width:100%;padding:13px;font-size:15px;border-radius:10px;margin-top:2px">Создать аккаунт</button>
+            <div class="modal-switch" style="margin-top:12px">Уже есть аккаунт? <a onclick="switchTab('login')">Войти</a></div>
+          </form>
+        </div>
+
+        <!-- ПОДТВЕРЖДЕНИЕ EMAIL -->
+        <div id="form-verify" style="display:none">
+          <div style="text-align:center;margin-bottom:22px">
+            <div style="width:56px;height:56px;background:rgba(224,48,48,0.12);border:1px solid rgba(224,48,48,0.25);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px">📧</div>
+            <div style="font-weight:800;font-size:17px;margin-bottom:6px">Проверь почту</div>
+            <div style="color:var(--text2);font-size:13px;line-height:1.5" id="verify-hint">Мы отправили 6-значный код на твой email</div>
           </div>
-          <div class="modal-switch" style="margin-top:8px">Нет аккаунта? <a onclick="switchTab('register')">Зарегистрироваться</a></div>
-        </form>
-      </div>
+          <div class="form-group">
+            <label>Код подтверждения</label>
+            <input type="text" id="verify-code" maxlength="6" placeholder="000000"
+              style="text-align:center;font-size:28px;font-weight:800;letter-spacing:10px;padding:14px">
+          </div>
+          <div class="form-error" id="verify-error"></div>
+          <button class="btn btn-red" style="width:100%;padding:13px;font-size:15px;border-radius:10px" onclick="doVerify()">Подтвердить</button>
+          <div class="modal-switch" style="margin-top:12px">Не пришло? <a onclick="resendCode()">Отправить снова</a></div>
+        </div>
 
-      <!-- РЕГИСТРАЦИЯ -->
-      <div id="form-register" style="display:none">
-        <form onsubmit="doRegister(event)">
-          <div class="form-group"><label>Никнейм</label><input type="text" id="reg-username" minlength="3" required autocomplete="username"></div>
-          <div class="form-group"><label>Email <span style="color:var(--accent2)">*</span></label><input type="email" id="reg-email" required autocomplete="email"></div>
-          <div class="form-group"><label>Пароль</label><input type="password" id="reg-password" minlength="6" required autocomplete="new-password"></div>
-          <div class="form-error" id="register-error"></div>
-          <button type="submit" class="btn btn-red" style="width:100%;padding:12px;margin-top:4px">Создать аккаунт</button>
-          <div class="modal-switch" style="margin-top:12px">Уже есть аккаунт? <a onclick="switchTab('login')">Войти</a></div>
-        </form>
-      </div>
+        <!-- СБРОС ПАРОЛЯ — шаг 1 -->
+        <div id="form-forgot" style="display:none">
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="width:56px;height:56px;background:rgba(224,48,48,0.12);border:1px solid rgba(224,48,48,0.25);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px">🔑</div>
+            <div style="font-weight:800;font-size:17px;margin-bottom:4px">Восстановление пароля</div>
+            <div style="color:var(--text2);font-size:13px">Введи email — пришлём код для сброса</div>
+          </div>
+          <div class="form-group">
+            <label>Email от аккаунта</label>
+            <input type="email" id="forgot-email" required placeholder="your@email.com">
+          </div>
+          <div class="form-error" id="forgot-error"></div>
+          <button class="btn btn-red" style="width:100%;padding:13px;font-size:15px;border-radius:10px" onclick="doForgot()">Отправить код</button>
+          <div class="modal-switch" style="margin-top:12px"><a onclick="switchTab('login')">← Назад ко входу</a></div>
+        </div>
 
-      <!-- ПОДТВЕРЖДЕНИЕ EMAIL -->
-      <div id="form-verify" style="display:none">
-        <div style="text-align:center;margin-bottom:20px">
-          <div style="font-size:36px;margin-bottom:10px">📧</div>
-          <div style="font-weight:700;font-size:16px;margin-bottom:6px">Проверь почту</div>
-          <div style="color:var(--text2);font-size:13px" id="verify-hint">Мы отправили 6-значный код на твой email</div>
+        <!-- СБРОС ПАРОЛЯ — шаг 2 -->
+        <div id="form-reset" style="display:none">
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="font-weight:800;font-size:17px;margin-bottom:4px">🔑 Новый пароль</div>
+            <div style="color:var(--text2);font-size:13px">Введи код из письма и придумай новый пароль</div>
+          </div>
+          <div class="form-group">
+            <label>Код из письма</label>
+            <input type="text" id="reset-code" maxlength="6" placeholder="000000"
+              style="text-align:center;font-size:24px;font-weight:800;letter-spacing:8px;padding:13px">
+          </div>
+          <div class="form-group">
+            <label>Новый пароль</label>
+            <input type="password" id="reset-password" minlength="6" placeholder="От 6 символов">
+          </div>
+          <div class="form-error" id="reset-error"></div>
+          <button class="btn btn-red" style="width:100%;padding:13px;font-size:15px;border-radius:10px" onclick="doReset()">Сменить пароль</button>
         </div>
-        <div class="form-group">
-          <label>Код подтверждения</label>
-          <input type="text" id="verify-code" maxlength="6" placeholder="000000"
-            style="text-align:center;font-size:24px;font-weight:700;letter-spacing:8px">
-        </div>
-        <div class="form-error" id="verify-error"></div>
-        <button class="btn btn-red" style="width:100%;padding:12px" onclick="doVerify()">Подтвердить</button>
-        <div class="modal-switch" style="margin-top:12px">
-          Не пришло? <a onclick="resendCode()">Отправить снова</a>
-        </div>
-      </div>
-
-      <!-- СБРОС ПАРОЛЯ — шаг 1: email -->
-      <div id="form-forgot" style="display:none">
-        <div style="font-weight:700;font-size:16px;margin-bottom:16px">🔑 Восстановление пароля</div>
-        <div class="form-group">
-          <label>Email от аккаунта</label>
-          <input type="email" id="forgot-email" required>
-        </div>
-        <div class="form-error" id="forgot-error"></div>
-        <button class="btn btn-red" style="width:100%;padding:12px" onclick="doForgot()">Отправить код</button>
-        <div class="modal-switch" style="margin-top:12px"><a onclick="switchTab('login')">← Назад к входу</a></div>
-      </div>
-
-      <!-- СБРОС ПАРОЛЯ — шаг 2: код + новый пароль -->
-      <div id="form-reset" style="display:none">
-        <div style="font-weight:700;font-size:16px;margin-bottom:16px">🔑 Новый пароль</div>
-        <div class="form-group">
-          <label>Код из письма</label>
-          <input type="text" id="reset-code" maxlength="6" placeholder="000000"
-            style="text-align:center;font-size:20px;font-weight:700;letter-spacing:6px">
-        </div>
-        <div class="form-group">
-          <label>Новый пароль</label>
-          <input type="password" id="reset-password" minlength="6">
-        </div>
-        <div class="form-error" id="reset-error"></div>
-        <button class="btn btn-red" style="width:100%;padding:12px" onclick="doReset()">Сменить пароль</button>
       </div>
 
     </div>
