@@ -8,140 +8,132 @@
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">✦ NeverLight</div>
-  <div class="nav-links">
-    <a href="/">Главная</a>
-    <a href="/forum.html">Форум</a>
-    <a href="/donate.html" class="active">Донат</a>
-    <a href="/download.html">Скачать</a>
-  </div>
-  <div class="nav-right" id="nav-right"></div>
-</nav>
-
 <div class="donate-wrap">
-  <div style="text-align:center;margin-bottom:60px">
-    <div class="hero-badge" style="display:inline-block;margin-bottom:16px">💎 Поддержи проект</div>
-    <h1 class="section-title" style="font-size:40px">Привилегии</h1>
-    <p style="color:var(--text2);font-size:16px;margin-top:8px">
-      Все деньги идут на развитие сервера. Спасибо за поддержку!
+  <div style="text-align:center;margin-bottom:48px">
+    <div class="hero-badge" style="display:inline-flex;align-items:center;gap:7px;margin-bottom:18px">
+      <span class="badge-dot"></span> Поддержи проект
+    </div>
+    <h1 class="section-title reveal" style="font-size:40px">Привилегии</h1>
+    <p class="reveal" style="color:var(--text2);font-size:15px;margin-top:8px">
+      Пополни баланс рубинов и купи привилегию. Видна на всех серверах в табе.
     </p>
   </div>
 
-  <div class="donate-cards">
+  <!-- RUBINS TOP-UP -->
+  <div class="reveal" style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:48px">
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:28px;margin-bottom:6px">💎 Рубины</div>
+      <div style="color:var(--text2);font-size:14px">Пополни баланс — потрать на привилегии и косметику</div>
+    </div>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <div class="card" style="min-width:150px;text-align:center;cursor:pointer" onclick="buyRubins(100,49)">
+        <div style="font-size:28px;margin-bottom:8px">💎</div>
+        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin-bottom:4px">100</div>
+        <div style="color:var(--text2);font-size:12px;margin-bottom:14px">рубинов</div>
+        <div class="btn btn-outline" style="font-size:13px;padding:7px 16px">49 ₽</div>
+      </div>
+      <div class="card" style="min-width:150px;text-align:center;cursor:pointer;border-color:rgba(224,48,48,0.35)" onclick="buyRubins(500,199)">
+        <div style="font-size:28px;margin-bottom:8px">💎💎</div>
+        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin-bottom:4px">500</div>
+        <div style="color:var(--text2);font-size:12px;margin-bottom:14px">рубинов</div>
+        <div class="btn btn-red" style="font-size:13px;padding:7px 16px">199 ₽</div>
+      </div>
+      <div class="card" style="min-width:150px;text-align:center;cursor:pointer" onclick="buyRubins(1500,499)">
+        <div style="font-size:28px;margin-bottom:8px">💎💎💎</div>
+        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin-bottom:4px">1500</div>
+        <div style="color:var(--text2);font-size:12px;margin-bottom:14px">рубинов</div>
+        <div class="btn btn-outline" style="font-size:13px;padding:7px 16px">499 ₽</div>
+      </div>
+      <div class="card" style="min-width:150px;text-align:center;cursor:pointer" onclick="buyRubins(5000,1490)">
+        <div style="font-size:28px;margin-bottom:8px">👑</div>
+        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin-bottom:4px">5000</div>
+        <div style="color:var(--text2);font-size:12px;margin-bottom:14px">рубинов</div>
+        <div class="btn btn-outline" style="font-size:13px;padding:7px 16px">1490 ₽</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="donate-card">
+  <!-- PRIVILEGES -->
+  <div style="text-align:center;margin-bottom:32px">
+    <div class="section-title reveal">Привилегии</div>
+    <div class="reveal" style="color:var(--text2);font-size:14px;margin-top:6px">Покупаются за рубины — навсегда, без подписок</div>
+  </div>
+
+  <div class="donate-cards">
+    <div class="donate-card reveal">
       <div class="donate-tier">⭐ Star</div>
-      <div class="donate-price">99 <span>₽/мес</span></div>
-      <div class="donate-period">или 799 ₽ навсегда</div>
+      <div class="donate-price">800 <span>руб.</span></div>
+      <div class="donate-period">Навсегда · ~800 💎</div>
       <ul class="donate-features">
         <li>Префикс [Star] в чате</li>
         <li>Цветной ник</li>
-        <li>100 рубинов в месяц</li>
+        <li>Бонус 100 рубинов</li>
         <li>Доступ к /nick</li>
         <li>Приоритетный вход</li>
+        <li>Бейдж на форуме</li>
       </ul>
-      <button class="btn btn-outline" style="width:100%" onclick="buyDonate('star')">Купить</button>
+      <button class="btn btn-outline" style="width:100%" onclick="buyPriv('star',800)">Купить за 800 💎</button>
     </div>
 
-    <div class="donate-card featured">
+    <div class="donate-card featured reveal reveal-delay-1">
       <div class="donate-badge">Популярное</div>
       <div class="donate-tier">🔴 Nova</div>
-      <div class="donate-price">249 <span>₽/мес</span></div>
-      <div class="donate-period">или 1990 ₽ навсегда</div>
+      <div class="donate-price">2000 <span>руб.</span></div>
+      <div class="donate-period">Навсегда · ~2000 💎</div>
       <ul class="donate-features">
         <li>Всё из Star</li>
-        <li>Префикс [Nova] красным</li>
-        <li>300 рубинов в месяц</li>
+        <li>Красный префикс [Nova]</li>
+        <li>Бонус 300 рубинов</li>
         <li>Уникальный плащ Nova</li>
         <li>/fly в хабе</li>
         <li>Кастомный join-эффект</li>
+        <li>Скрытие /vanish</li>
       </ul>
-      <button class="btn btn-red" style="width:100%" onclick="buyDonate('nova')">Купить</button>
+      <button class="btn btn-red" style="width:100%" onclick="buyPriv('nova',2000)">Купить за 2000 💎</button>
     </div>
 
-    <div class="donate-card">
+    <div class="donate-card reveal reveal-delay-2">
       <div class="donate-tier">👑 Eternal</div>
-      <div class="donate-price">599 <span>₽/мес</span></div>
-      <div class="donate-period">или 4990 ₽ навсегда</div>
+      <div class="donate-price">5000 <span>руб.</span></div>
+      <div class="donate-period">Навсегда · ~5000 💎</div>
       <ul class="donate-features">
         <li>Всё из Nova</li>
         <li>Золотой префикс [Eternal]</li>
-        <li>1000 рубинов в месяц</li>
+        <li>Бонус 1000 рубинов</li>
         <li>Эксклюзивная косметика</li>
         <li>Свой домашний регион</li>
-        <li>Бейдж на форуме</li>
         <li>Ранний доступ к обновлениям</li>
+        <li>VIP-роль в Discord</li>
       </ul>
-      <button class="btn btn-outline" style="width:100%" onclick="buyDonate('eternal')">Купить</button>
-    </div>
-
-  </div>
-
-  <div style="margin-top:60px;text-align:center">
-    <div class="section-title" style="font-size:24px;margin-bottom:8px">💎 Рубины</div>
-    <p style="color:var(--text2);margin-bottom:32px">Внутриигровая валюта для покупки косметики</p>
-    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
-      <div class="card" style="min-width:160px;text-align:center;cursor:pointer" onclick="buyRubins(100)">
-        <div style="font-size:32px">💎</div>
-        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin:8px 0">100</div>
-        <div style="color:var(--text2);font-size:13px;margin-bottom:12px">рубинов</div>
-        <div class="btn btn-outline" style="font-size:13px;padding:6px 14px">49 ₽</div>
-      </div>
-      <div class="card" style="min-width:160px;text-align:center;cursor:pointer;border-color:rgba(224,48,48,0.4)" onclick="buyRubins(500)">
-        <div style="font-size:32px">💎💎</div>
-        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin:8px 0">500</div>
-        <div style="color:var(--text2);font-size:13px;margin-bottom:12px">рубинов</div>
-        <div class="btn btn-red" style="font-size:13px;padding:6px 14px">199 ₽</div>
-      </div>
-      <div class="card" style="min-width:160px;text-align:center;cursor:pointer" onclick="buyRubins(1500)">
-        <div style="font-size:32px">💎💎💎</div>
-        <div style="font-size:22px;font-weight:800;color:#ffcc44;margin:8px 0">1500</div>
-        <div style="color:var(--text2);font-size:13px;margin-bottom:12px">рубинов</div>
-        <div class="btn btn-outline" style="font-size:13px;padding:6px 14px">499 ₽</div>
-      </div>
+      <button class="btn btn-outline" style="width:100%" onclick="buyPriv('eternal',5000)">Купить за 5000 💎</button>
     </div>
   </div>
 
-</div>
-
-<!-- AUTH MODAL -->
-<div class="modal-overlay" id="auth-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="modal-tabs">
-      <div class="modal-tab active" data-tab="login" onclick="switchTab('login')">Войти</div>
-      <div class="modal-tab" data-tab="register" onclick="switchTab('register')">Регистрация</div>
-    </div>
-    <div id="form-login">
-      <form onsubmit="doLogin(event)">
-        <div class="form-group"><label>Никнейм или email</label><input type="text" id="login-username" required></div>
-        <div class="form-group"><label>Пароль</label><input type="password" id="login-password" required></div>
-        <div class="form-error" id="login-error"></div>
-        <button type="submit" class="btn btn-red" style="width:100%;padding:12px">Войти</button>
-      </form>
-    </div>
-    <div id="form-register" style="display:none">
-      <form onsubmit="doRegister(event)">
-        <div class="form-group"><label>Никнейм</label><input type="text" id="reg-username" minlength="3" required></div>
-        <div class="form-group"><label>Email (необязательно)</label><input type="email" id="reg-email"></div>
-        <div class="form-group"><label>Пароль</label><input type="password" id="reg-password" minlength="6" required></div>
-        <div class="form-error" id="register-error"></div>
-        <button type="submit" class="btn btn-red" style="width:100%;padding:12px">Создать аккаунт</button>
-      </form>
-    </div>
+  <div class="reveal" style="margin-top:40px;background:rgba(255,180,0,0.06);border:1px solid rgba(255,180,0,0.18);border-radius:14px;padding:24px;text-align:center">
+    <div style="font-size:20px;margin-bottom:8px">💳 Оплата</div>
+    <p style="color:var(--text2);font-size:14px;line-height:1.7">
+      Пополнение через СБП или карту будет добавлено в ближайшем обновлении.<br>
+      Пока напиши основателю в <a href="https://t.me/neverlight_official" target="_blank" style="color:var(--accent2)">Telegram</a> — рубины будут зачислены вручную.
+    </p>
   </div>
 </div>
 
 <script src="/assets/js/api.js"></script>
+<script src="/assets/js/common.js"></script>
+<script src="/assets/js/particles.js"></script>
 <script>
-function buyDonate(tier) {
+function buyRubins(amount, price) {
   if (!Auth.isLoggedIn()) { openModal('login'); return; }
-  alert('Система оплаты скоро будет добавлена! Напиши администратору в Discord.');
+  alert(`Оплата через СБП скоро будет доступна!\nПока напиши в Telegram: @neverlight_official\nСумма: ${price} ₽ → ${amount} 💎`);
 }
-function buyRubins(amount) {
+function buyPriv(tier, rubins) {
   if (!Auth.isLoggedIn()) { openModal('login'); return; }
-  alert('Система оплаты скоро будет добавлена! Напиши администратору в Discord.');
+  const user = Auth.user();
+  if ((user.balance_rubins || 0) < rubins) {
+    alert(`Недостаточно рубинов! Нужно ${rubins} 💎, у тебя ${user.balance_rubins || 0} 💎`);
+    return;
+  }
+  alert('Система покупки привилегий скоро будет добавлена!');
 }
 </script>
 </body>
