@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Скачать — NeverLight</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">✦ NeverLight</div>
+  <div class="nav-links">
+    <a href="/">Главная</a>
+    <a href="/forum.html">Форум</a>
+    <a href="/donate.html">Донат</a>
+    <a href="/download.html" class="active">Скачать</a>
+  </div>
+  <div class="nav-right" id="nav-right"></div>
+</nav>
+
+<div class="download-wrap">
+  <div class="hero-badge" style="display:inline-block;margin-bottom:20px">🚀 Актуальная версия</div>
+  <h1 class="section-title" style="font-size:40px">Скачать лаунчер</h1>
+  <p style="color:var(--text2);margin-top:8px;font-size:16px">
+    Лаунчер автоматически установит Java, Minecraft 1.21.4 и все необходимые моды.
+  </p>
+
+  <div class="download-card">
+    <div style="font-size:64px;margin-bottom:20px">🎮</div>
+    <div class="download-version">NeverLight Launcher · Версия Beta</div>
+    <h2 style="font-size:28px;font-weight:900;margin:10px 0">NeverLight для Windows</h2>
+    <p style="color:var(--text2);margin:12px 0 28px;font-size:14px;max-width:400px;margin-left:auto;margin-right:auto">
+      Требуется Windows 10 или новее. Лаунчер самостоятельно скачает Java и Minecraft — ничего не нужно устанавливать вручную.
+    </p>
+    <a href="https://github.com/AniMoonST/MinecraftLauncher/releases/latest/download/NeverLightLauncher.exe"
+       class="btn btn-red btn-lg" style="display:inline-block">
+      ⬇ Скачать .exe
+    </a>
+    <div class="download-size">Windows 64-bit · ~15 MB</div>
+  </div>
+
+  <div class="cards" style="margin-top:40px">
+    <div class="card">
+      <div class="card-icon">1️⃣</div>
+      <h3>Скачай лаунчер</h3>
+      <p>Нажми кнопку выше и скачай файл NeverLightLauncher.exe</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">2️⃣</div>
+      <h3>Запусти файл</h3>
+      <p>Запусти скачанный exe. Windows может показать предупреждение — нажми «Подробнее» → «Всё равно запустить»</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">3️⃣</div>
+      <h3>Войди в аккаунт</h3>
+      <p>Введи никнейм и пароль от аккаунта NeverLight. Если нет — зарегистрируйся на сайте</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">4️⃣</div>
+      <h3>Играй!</h3>
+      <p>Нажми «Играть» — лаунчер скачает всё необходимое и запустит игру на сервер</p>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="auth-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-tabs">
+      <div class="modal-tab active" data-tab="login" onclick="switchTab('login')">Войти</div>
+      <div class="modal-tab" data-tab="register" onclick="switchTab('register')">Регистрация</div>
+    </div>
+    <div id="form-login">
+      <form onsubmit="doLogin(event)">
+        <div class="form-group"><label>Никнейм или email</label><input type="text" id="login-username" required></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="login-password" required></div>
+        <div class="form-error" id="login-error"></div>
+        <button type="submit" class="btn btn-red" style="width:100%;padding:12px">Войти</button>
+      </form>
+    </div>
+    <div id="form-register" style="display:none">
+      <form onsubmit="doRegister(event)">
+        <div class="form-group"><label>Никнейм</label><input type="text" id="reg-username" minlength="3" required></div>
+        <div class="form-group"><label>Email (необязательно)</label><input type="email" id="reg-email"></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="reg-password" minlength="6" required></div>
+        <div class="form-error" id="register-error"></div>
+        <button type="submit" class="btn btn-red" style="width:100%;padding:12px">Создать аккаунт</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/api.js"></script>
+</body>
+</html>
