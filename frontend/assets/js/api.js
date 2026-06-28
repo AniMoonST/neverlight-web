@@ -108,9 +108,13 @@ function switchTab(tab) {
   document.querySelectorAll('.form-error').forEach(e => e.classList.remove('show'));
 }
 
+let _pendingVerifyEmail = '';
+let _forgotEmail = '';
+
 async function doLogin(e) {
   e.preventDefault();
   const err = document.getElementById('login-error');
+  err.classList.remove('show');
   try {
     await Auth.login(
       document.getElementById('login-username').value,
@@ -119,23 +123,150 @@ async function doLogin(e) {
     closeModal();
     updateNav();
     if (typeof onLoginSuccess === 'function') onLoginSuccess();
-  } catch (ex) { err.textContent = ex.message; err.classList.add('show'); }
+  } catch (ex) {
+    if (ex.needVerify) {
+      _pendingVerifyEmail = ex.email;
+      showVerifyForm(`Код отправлен на ${ex.email}`);
+    } else {
+      err.textContent = ex.message; err.classList.add('show');
+    }
+  }
 }
+
+// Перехватываем ошибку needVerify из Auth.login
+const _origLogin = Auth.login.bind(Auth);
+Auth.login = async function(username, password) {
+  const r = await fetch(`${API}/auth/login`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, password })
+  });
+  const data = await r.json();
+  if (!r.ok) {
+    const err = new Error(data.error);
+    if (data.needVerify) { err.needVerify = true; err.email = data.email; }
+    throw err;
+  }
+  localStorage.setItem('nl_token', data.token);
+  localStorage.setItem('nl_user', JSON.stringify(data.user));
+  return data;
+};
 
 async function doRegister(e) {
   e.preventDefault();
   const err = document.getElementById('register-error');
   const email = document.getElementById('reg-email').value;
-  if (!email) { err.textContent = 'Email обязателен для регистрации'; err.classList.add('show'); return; }
+  if (!email) { err.textContent = 'Email обязателен'; err.classList.add('show'); return; }
   try {
     await Auth.register(
       document.getElementById('reg-username').value,
       email,
       document.getElementById('reg-password').value
     );
-    switchTab('login');
-    document.getElementById('login-username').value = document.getElementById('reg-username').value;
+    _pendingVerifyEmail = email;
+    showVerifyForm(`Код отправлен на ${email}`);
   } catch (ex) { err.textContent = ex.message; err.classList.add('show'); }
+}
+
+function showVerifyForm(hint) {
+  ['form-login','form-register','form-forgot','form-reset'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const tabs = document.getElementById('modal-tabs-row');
+  if (tabs) tabs.style.display = 'none';
+  document.getElementById('form-verify').style.display = 'block';
+  const h = document.getElementById('verify-hint');
+  if (h) h.textContent = hint || '';
+  document.getElementById('verify-code').value = '';
+  document.getElementById('verify-error').classList.remove('show');
+}
+
+async function doVerify() {
+  const code = document.getElementById('verify-code').value.trim();
+  const err = document.getElementById('verify-error');
+  if (code.length !== 6) { err.textContent = 'Введи 6-значный код'; err.classList.add('show'); return; }
+  try {
+    const r = await fetch(`${API}/auth/verify-email`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: _pendingVerifyEmail, code })
+    });
+    const data = await r.json();
+    if (!r.ok) { err.textContent = data.error; err.classList.add('show'); return; }
+    // Успех — просим войти
+    showSuccessAndSwitchToLogin();
+  } catch (ex) { err.textContent = 'Ошибка сети'; err.classList.add('show'); }
+}
+
+function showSuccessAndSwitchToLogin() {
+  const tabs = document.getElementById('modal-tabs-row');
+  if (tabs) tabs.style.display = 'flex';
+  document.getElementById('form-verify').style.display = 'none';
+  switchTab('login');
+  const err = document.getElementById('login-error');
+  if (err) { err.style.color = '#30dd70'; err.textContent = '✓ Email подтверждён! Теперь войди.'; err.classList.add('show'); }
+}
+
+async function resendCode() {
+  try {
+    await fetch(`${API}/auth/resend-code`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: _pendingVerifyEmail })
+    });
+    const h = document.getElementById('verify-hint');
+    if (h) h.textContent = `Новый код отправлен на ${_pendingVerifyEmail}`;
+  } catch {}
+}
+
+function showForgotPassword() {
+  ['form-login','form-register','form-verify','form-reset'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
+  const tabs = document.getElementById('modal-tabs-row');
+  if (tabs) tabs.style.display = 'none';
+  document.getElementById('form-forgot').style.display = 'block';
+  document.getElementById('forgot-email').value = '';
+  document.getElementById('forgot-error').classList.remove('show');
+}
+
+async function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  const err = document.getElementById('forgot-error');
+  if (!email) { err.textContent = 'Введи email'; err.classList.add('show'); return; }
+  try {
+    const r = await fetch(`${API}/auth/forgot-password`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    await r.json();
+    _forgotEmail = email;
+    document.getElementById('form-forgot').style.display = 'none';
+    document.getElementById('form-reset').style.display = 'block';
+    document.getElementById('reset-code').value = '';
+    document.getElementById('reset-password').value = '';
+    document.getElementById('reset-error').classList.remove('show');
+  } catch { err.textContent = 'Ошибка'; err.classList.add('show'); }
+}
+
+async function doReset() {
+  const code = document.getElementById('reset-code').value.trim();
+  const password = document.getElementById('reset-password').value;
+  const err = document.getElementById('reset-error');
+  if (!code || !password) { err.textContent = 'Заполни все поля'; err.classList.add('show'); return; }
+  try {
+    const r = await fetch(`${API}/auth/reset-password`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: _forgotEmail, code, password })
+    });
+    const data = await r.json();
+    if (!r.ok) { err.textContent = data.error; err.classList.add('show'); return; }
+    const tabs = document.getElementById('modal-tabs-row');
+    if (tabs) tabs.style.display = 'flex';
+    document.getElementById('form-reset').style.display = 'none';
+    switchTab('login');
+    const lerr = document.getElementById('login-error');
+    if (lerr) { lerr.style.color = '#30dd70'; lerr.textContent = '✓ Пароль изменён! Теперь войди.'; lerr.classList.add('show'); }
+  } catch { err.textContent = 'Ошибка'; err.classList.add('show'); }
 }
 
 function escHtml(s) {

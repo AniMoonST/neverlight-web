@@ -66,19 +66,26 @@
   <div class="modal-overlay" id="auth-modal">
     <div class="modal">
       <button class="modal-close" onclick="closeModal()">×</button>
-      <div class="modal-tabs">
+      <div class="modal-tabs" id="modal-tabs-row">
         <div class="modal-tab active" data-tab="login" onclick="switchTab('login')">Войти</div>
         <div class="modal-tab" data-tab="register" onclick="switchTab('register')">Регистрация</div>
       </div>
+
+      <!-- ВХОД -->
       <div id="form-login">
         <form onsubmit="doLogin(event)">
           <div class="form-group"><label>Никнейм или Email</label><input type="text" id="login-username" required autocomplete="username"></div>
           <div class="form-group"><label>Пароль</label><input type="password" id="login-password" required autocomplete="current-password"></div>
           <div class="form-error" id="login-error"></div>
           <button type="submit" class="btn btn-red" style="width:100%;padding:12px;margin-top:4px">Войти</button>
-          <div class="modal-switch" style="margin-top:12px">Нет аккаунта? <a onclick="switchTab('register')">Зарегистрироваться</a></div>
+          <div class="modal-switch" style="margin-top:10px">
+            <a onclick="showForgotPassword()" style="color:var(--text2);font-size:12px">Забыли пароль?</a>
+          </div>
+          <div class="modal-switch" style="margin-top:8px">Нет аккаунта? <a onclick="switchTab('register')">Зарегистрироваться</a></div>
         </form>
       </div>
+
+      <!-- РЕГИСТРАЦИЯ -->
       <div id="form-register" style="display:none">
         <form onsubmit="doRegister(event)">
           <div class="form-group"><label>Никнейм</label><input type="text" id="reg-username" minlength="3" required autocomplete="username"></div>
@@ -89,6 +96,54 @@
           <div class="modal-switch" style="margin-top:12px">Уже есть аккаунт? <a onclick="switchTab('login')">Войти</a></div>
         </form>
       </div>
+
+      <!-- ПОДТВЕРЖДЕНИЕ EMAIL -->
+      <div id="form-verify" style="display:none">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:36px;margin-bottom:10px">📧</div>
+          <div style="font-weight:700;font-size:16px;margin-bottom:6px">Проверь почту</div>
+          <div style="color:var(--text2);font-size:13px" id="verify-hint">Мы отправили 6-значный код на твой email</div>
+        </div>
+        <div class="form-group">
+          <label>Код подтверждения</label>
+          <input type="text" id="verify-code" maxlength="6" placeholder="000000"
+            style="text-align:center;font-size:24px;font-weight:700;letter-spacing:8px">
+        </div>
+        <div class="form-error" id="verify-error"></div>
+        <button class="btn btn-red" style="width:100%;padding:12px" onclick="doVerify()">Подтвердить</button>
+        <div class="modal-switch" style="margin-top:12px">
+          Не пришло? <a onclick="resendCode()">Отправить снова</a>
+        </div>
+      </div>
+
+      <!-- СБРОС ПАРОЛЯ — шаг 1: email -->
+      <div id="form-forgot" style="display:none">
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px">🔑 Восстановление пароля</div>
+        <div class="form-group">
+          <label>Email от аккаунта</label>
+          <input type="email" id="forgot-email" required>
+        </div>
+        <div class="form-error" id="forgot-error"></div>
+        <button class="btn btn-red" style="width:100%;padding:12px" onclick="doForgot()">Отправить код</button>
+        <div class="modal-switch" style="margin-top:12px"><a onclick="switchTab('login')">← Назад к входу</a></div>
+      </div>
+
+      <!-- СБРОС ПАРОЛЯ — шаг 2: код + новый пароль -->
+      <div id="form-reset" style="display:none">
+        <div style="font-weight:700;font-size:16px;margin-bottom:16px">🔑 Новый пароль</div>
+        <div class="form-group">
+          <label>Код из письма</label>
+          <input type="text" id="reset-code" maxlength="6" placeholder="000000"
+            style="text-align:center;font-size:20px;font-weight:700;letter-spacing:6px">
+        </div>
+        <div class="form-group">
+          <label>Новый пароль</label>
+          <input type="password" id="reset-password" minlength="6">
+        </div>
+        <div class="form-error" id="reset-error"></div>
+        <button class="btn btn-red" style="width:100%;padding:12px" onclick="doReset()">Сменить пароль</button>
+      </div>
+
     </div>
   </div>`;
   document.body.insertAdjacentHTML('beforeend', modalHtml);
